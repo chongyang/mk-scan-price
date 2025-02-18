@@ -119,7 +119,9 @@ const QRScanner = ({ onScan, onError }: QRScannerProps) => {
   }, [onScanSuccess, onScanError, cleanupScanner]);
 
   return (
-    <div id="reader" className="w-full h-[350px] max-w-[350px] mx-auto mb-4 overflow-hidden" />
+    <div className="flex items-center justify-center min-h-[calc(100vh-12rem)]">
+      <div id="reader" className="w-full h-[350px] max-w-[350px] overflow-hidden" />
+    </div>
   );
 };
 
