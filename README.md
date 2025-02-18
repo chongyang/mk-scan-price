@@ -14,6 +14,7 @@ A mobile web application that allows users to scan QR codes and check product pr
 - Node.js 16.x or later
 - npm 7.x or later
 - A device with a camera (for QR code scanning)
+- PostgreSQL database
 
 ## Setup
 
@@ -28,12 +29,23 @@ cd mkpricecheck
 npm install
 ```
 
-3. Run the development server:
+3. Set up environment variables:
+   - Copy `src/lib/db.template.ts` to `src/lib/db.ts`
+   - Create a `.env` file in the root directory with the following variables:
+   ```
+   DB_HOST=your_database_host
+   DB_PORT=your_database_port
+   DB_NAME=your_database_name
+   DB_USER=your_database_user
+   DB_PASSWORD=your_database_password
+   ```
+
+4. Run the development server:
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your mobile browser to start using the application.
+5. Open [http://localhost:3000](http://localhost:3000) with your mobile browser to start using the application.
 
 ## Usage
 
