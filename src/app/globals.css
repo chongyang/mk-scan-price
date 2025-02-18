@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for the QR scanner */
+#reader {
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+#reader video {
+  width: 100% !important;
+  border-radius: 0.5rem;
+} 

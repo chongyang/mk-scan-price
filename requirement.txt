@@ -1,0 +1,97 @@
+i need your help to generate my spec and requirements for a mobile web app on nextjs with shadcn/ui, to allow user to scan qr code and it will check with postgre DB for name_shop, out_price, and quantity.
+
+Use: https://github.com/mebjas/html5-qrcode
+
+
+Front End:
+
+- Add a camera preview with html5-qrcode
+
+- When qr code scan success, it will check with postgre DB for name_shop, out_price, and quantity. and output the result on the screen. else show error message.
+
+Backend:
+13) Get price from postgre
+Postgre connection string: Host=43.216.182.1;Port=5432;Database=mkhub_products;Username=mkdevcy;Password=Cyisgay123!
+here is a sample structure of the postgre table:
+CREATE TABLE IF NOT EXISTS catalogue.products
+(
+    product_id integer NOT NULL DEFAULT nextval('catalogue.products_product_id_seq'::regclass),
+    sku character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    parent_sku character varying(255) COLLATE pg_catalog."default",
+    box character varying(255) COLLATE pg_catalog."default",
+    assigned boolean DEFAULT false,
+    multiple boolean DEFAULT false,
+    assignee character varying(255) COLLATE pg_catalog."default",
+    name_china text COLLATE pg_catalog."default",
+    link_1 text COLLATE pg_catalog."default",
+    link_2 text COLLATE pg_catalog."default",
+    link_3 text COLLATE pg_catalog."default",
+    category character varying(255) COLLATE pg_catalog."default",
+    short_name character varying(255) COLLATE pg_catalog."default",
+    for_printing character varying(255) COLLATE pg_catalog."default",
+    for_printing_shopee character varying(255) COLLATE pg_catalog."default",
+    name_shop text COLLATE pg_catalog."default",
+    description_shop text COLLATE pg_catalog."default",
+    in_price_rmb numeric,
+    in_price_rm numeric,
+    out_price numeric,
+    quantity integer,
+    weight numeric,
+    width numeric,
+    length numeric,
+    height numeric,
+    shopee_category character varying(255) COLLATE pg_catalog."default",
+    description text COLLATE pg_catalog."default",
+    for_qr character varying(255) COLLATE pg_catalog."default",
+    photo boolean DEFAULT false,
+    edited boolean DEFAULT false,
+    shopee boolean DEFAULT false,
+    ai_description text COLLATE pg_catalog."default",
+    ai_features text COLLATE pg_catalog."default",
+    ai_fun text COLLATE pg_catalog."default",
+    ai_keywords text COLLATE pg_catalog."default",
+    ai_includes text COLLATE pg_catalog."default",
+    feature_1 text COLLATE pg_catalog."default",
+    feature_2 text COLLATE pg_catalog."default",
+    feature_3 text COLLATE pg_catalog."default",
+    ai_title text COLLATE pg_catalog."default",
+    is_in_queue boolean DEFAULT false,
+    label_printed boolean DEFAULT false,
+    woocommerce_live boolean DEFAULT false,
+    tiktok_live boolean DEFAULT false,
+    lazada_live boolean DEFAULT false,
+    shopee_live boolean DEFAULT false,
+    ai_vector_description text COLLATE pg_catalog."default",
+    ai_thumb_title_top character varying(255) COLLATE pg_catalog."default",
+    ai_thumb_title_bottom character varying(255) COLLATE pg_catalog."default",
+    relative_sku character varying(255) COLLATE pg_catalog."default",
+    shopee_id character varying(255) COLLATE pg_catalog."default",
+    woocommerce_id character varying(255) COLLATE pg_catalog."default",
+    shopee_quantity integer DEFAULT 0,
+    woocommerce_quantity numeric DEFAULT 0,
+    shopee_thumb text COLLATE pg_catalog."default",
+    shopee_variation_id character varying(255) COLLATE pg_catalog."default",
+    shopee_price numeric,
+    is_temp_listing boolean DEFAULT false,
+    CONSTRAINT products_pkey PRIMARY KEY (product_id),
+    CONSTRAINT products_sku_key UNIQUE (sku)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE IF EXISTS catalogue.products
+    OWNER to mkdevcy;
+
+-- Trigger: update_product_vectors_trigger
+
+-- DROP TRIGGER IF EXISTS update_product_vectors_trigger ON catalogue.products;
+
+CREATE OR REPLACE TRIGGER update_product_vectors_trigger
+    AFTER INSERT OR UPDATE OF sku, parent_sku, category, short_name, for_printing, name_shop, description_shop, feature_1, feature_2, feature_3
+    ON catalogue.products
+    FOR EACH ROW
+    EXECUTE FUNCTION catalogue.update_product_search_text();
+
+
+
+
